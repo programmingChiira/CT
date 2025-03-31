@@ -22,7 +22,7 @@ class TaskResource extends Resource
 {
     protected static ?string $model = Task::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-library';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document';
     protected static ?string $navigationLabel = 'Task';
     protected static ?string $modelLabel = 'Task';
     protected static ?string $navigationGroup = 'System management';
@@ -49,6 +49,14 @@ class TaskResource extends Resource
                             ->label('Task name')
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\Select::make('priority')
+                            ->label('Priority')
+                            ->options([
+                                'high' => 'High',
+                                'medium' => 'Medium',
+                                'low' => 'Low',
+                            ])
+                            ->required(),
                     ])->columns(2),
             ]);
     }
@@ -56,12 +64,23 @@ class TaskResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderable('sort_order')
             ->columns([
                 Tables\Columns\TextColumn::make('project.title')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Task title')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('priority')
+                    ->label('Priority')
+                    ->sortable()
+                    ->formatStateUsing(fn($state) => ucfirst($state))
+                    ->color(fn($state) => match ($state) {
+                        'High' => 'red',
+                        'Medium' => 'orange',
+                        'Low' => 'green',
+                        default => 'gray',
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -77,12 +96,14 @@ class TaskResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('sort_order', 'asc');
     }
 
     public static function infolist(Infolist $infolist): Infolist
@@ -91,7 +112,7 @@ class TaskResource extends Resource
             ->schema([
                 Section::make('Task Info')
                     ->schema([
-                        TextEntry::make('project.name')->label('Country name'),
+                        TextEntry::make('project.name')->label('Project name'),
                         TextEntry::make('name')->label('Task name'),
                     ])->columns(2)
             ]);

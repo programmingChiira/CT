@@ -15,6 +15,12 @@ class Task extends Model
         'project_id',
         'title',
         'priority',
+        'sort_order',
+    ];
+
+    public $sortable = [
+        'order_column_name' => 'sort_order',
+        'sort_when_creating' => true,
     ];
 
     public function project(): BelongsTo

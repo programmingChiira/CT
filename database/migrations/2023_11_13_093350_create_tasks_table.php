@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('priority');
             $table->timestamps();
+            $table->integer('sort_order')->default(0);
         });
     }
 
