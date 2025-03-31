@@ -2,7 +2,7 @@
 
 namespace App\Filament\App\Widgets;
 
-use App\Models\Employee;
+use App\Models\Task;
 use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -18,8 +18,8 @@ class StatsAdminOverview extends BaseWidget
             Stat::make('Bounce rate', '21%')
                 ->description('7% increase')
                 ->color('danger'),
-            Stat::make('Employees', Employee::query()->count())
-                ->description('Employee count')
+            Stat::make('Tasks', Task::query()->count())
+                ->description('Task count')
                 ->color('success'),
         ];
     }

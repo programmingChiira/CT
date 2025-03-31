@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\StateResource\Pages;
-use App\Filament\Resources\StateResource\RelationManagers;
-use App\Filament\Resources\StateResource\RelationManagers\CitiesRelationManager;
-use App\Filament\Resources\StateResource\RelationManagers\EmployeesRelationManager;
-use App\Models\State;
+use App\Filament\Resources\TaskResource\Pages;
+use App\Filament\Resources\TaskResource\RelationManagers;
+use App\Filament\Resources\TaskResource\RelationManagers\CitiesRelationManager;
+use App\Filament\Resources\TaskResource\RelationManagers\EmployeesRelationManager;
+use App\Models\Task;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
@@ -18,15 +18,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class StateResource extends Resource
+class TaskResource extends Resource
 {
-    protected static ?string $model = State::class;
+    protected static ?string $model = Task::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
-    protected static ?string $navigationLabel = 'State';
-    protected static ?string $modelLabel = 'State';
+    protected static ?string $navigationLabel = 'Task';
+    protected static ?string $modelLabel = 'Task';
     protected static ?string $navigationGroup = 'System management';
-    protected static ?string $slug = 'states';
+    protected static ?string $slug = 'tasks';
     protected static ?int $navigationSort = 2;
 
     public static function getNavigationBadge(): ?string
@@ -38,15 +38,15 @@ class StateResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('State details')
+                Forms\Components\Section::make('Task details')
                     ->schema([
-                        Forms\Components\Select::make('country_id')
-                            ->relationship(name: 'country', titleAttribute: 'name')
+                        Forms\Components\Select::make('project_id')
+                            ->relationship(name: 'project', titleAttribute: 'title')
                             ->searchable()
                             ->preload()
                             ->required(),
-                        Forms\Components\TextInput::make('name')
-                            ->label('State name')
+                        Forms\Components\TextInput::make('title')
+                            ->label('Task name')
                             ->required()
                             ->maxLength(255),
                     ])->columns(2),
@@ -57,10 +57,10 @@ class StateResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('country.name')
+                Tables\Columns\TextColumn::make('project.title')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
-                    ->label('State name')
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Task title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -89,10 +89,10 @@ class StateResource extends Resource
     {
         return $infolist
             ->schema([
-                Section::make('State Info')
+                Section::make('Task Info')
                     ->schema([
-                        TextEntry::make('country.name')->label('Country name'),
-                        TextEntry::make('name')->label('State name'),
+                        TextEntry::make('project.name')->label('Country name'),
+                        TextEntry::make('name')->label('Task name'),
                     ])->columns(2)
             ]);
     }
@@ -100,17 +100,16 @@ class StateResource extends Resource
     public static function getRelations(): array
     {
         return [
-            CitiesRelationManager::class,
-            EmployeesRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListStates::route('/'),
-            'create' => Pages\CreateState::route('/create'),
-            'edit' => Pages\EditState::route('/{record}/edit'),
+            'index' => Pages\ListTasks::route('/'),
+            'create' => Pages\CreateTask::route('/create'),
+            'edit' => Pages\EditTask::route('/{record}/edit'),
         ];
     }
 }

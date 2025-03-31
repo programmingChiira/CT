@@ -6,19 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Country extends Model
+class Project extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'code',
-        'phonecode'
+        'title',
     ];
 
-    public function states(): HasMany
+    public function tasks(): HasMany
     {
-        return $this->hasMany(State::class);
+        return $this->hasMany(Task::class);
     }
 
 }

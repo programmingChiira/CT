@@ -7,17 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class State extends Model
+class Task extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'country_id',
-        'name'
+        'project_id',
+        'title',
+        'priority',
     ];
 
-    public function country(): BelongsTo
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo(Project::class);
     }
 }

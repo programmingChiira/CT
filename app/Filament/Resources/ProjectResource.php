@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CountryResource\Pages;
-use App\Filament\Resources\CountryResource\RelationManagers;
-use App\Filament\Resources\CountryResource\RelationManagers\EmployeesRelationManager;
-use App\Filament\Resources\CountryResource\RelationManagers\StatesRelationManager;
-use App\Models\Country;
+use App\Filament\Resources\ProjectResource\Pages;
+use App\Filament\Resources\ProjectResource\RelationManagers;
+use App\Filament\Resources\ProjectResource\RelationManagers\EmployeesRelationManager;
+use App\Filament\Resources\ProjectResource\RelationManagers\TasksRelationManager;
+use App\Models\Project;
 use Filament\Forms;
 use Filament\Infolists\Components\Section;
 use Filament\Forms\Form;
@@ -19,15 +19,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CountryResource extends Resource
+class ProjectResource extends Resource
 {
-    protected static ?string $model = Country::class;
+    protected static ?string $model = Project::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-flag';
-    protected static ?string $navigationLabel = 'Country';
-    protected static ?string $modelLabel = 'Country';
+    protected static ?string $navigationLabel = 'Project';
+    protected static ?string $modelLabel = 'Project';
     protected static ?string $navigationGroup = 'System management';
-    protected static ?string $slug = 'countries';
+    protected static ?string $slug = 'projects';
     protected static ?int $navigationSort = 1;
 
     public static function getNavigationBadge(): ?string
@@ -39,18 +39,11 @@ class CountryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Country details')
+                Forms\Components\Section::make('Project details')
                     ->schema([
-                        Forms\Components\TextInput::make('name')
+                        Forms\Components\TextInput::make('title')
                             ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('code')
-                            ->required()
-                            ->maxLength(3),
-                        Forms\Components\TextInput::make('phonecode')
-                            ->required()
-                            ->numeric()
-                            ->maxLength(5)
+                            ->maxLength(255)
                             ->columnSpanFull(),
                     ])->columns(2),
             ]);
@@ -60,15 +53,9 @@ class CountryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('code')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('phonecode')
-                    ->numeric()
-                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -96,11 +83,9 @@ class CountryResource extends Resource
     {
         return $infolist
             ->schema([
-                Section::make('Country Info')
+                Section::make('Project Info')
                     ->schema([
-                        TextEntry::make('name')->label('Name'),
-                        TextEntry::make('code')->label('Country code'),
-                        TextEntry::make('phonecode')->label('Phone code'),
+                        TextEntry::make('title')->label('Title'),
                     ])->columns(3)
             ]);
     }
@@ -108,17 +93,16 @@ class CountryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            StatesRelationManager::class,
-            EmployeesRelationManager::class,
+            TasksRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCountries::route('/'),
-            'create' => Pages\CreateCountry::route('/create'),
-            'edit' => Pages\EditCountry::route('/{record}/edit'),
+            'index' => Pages\ListProjects::route('/'),
+            'create' => Pages\CreateProject::route('/create'),
+            'edit' => Pages\EditProject::route('/{record}/edit'),
         ];
     }
 }
