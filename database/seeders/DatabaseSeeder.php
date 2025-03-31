@@ -25,5 +25,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $role = Role::create(['name' => 'Admin']);
         $user->assignRole($role);
+
+        $this->call(PermissionSeeder::class);
     }
 }

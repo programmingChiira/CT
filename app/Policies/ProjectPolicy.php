@@ -13,15 +13,21 @@ class ProjectPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->hasRole(["Admin"]);
+        if ($user->hasPermissionTo("Access Projects") || $user->hasRole(["Admin"])) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Project $project)
+    public function view(User $user, Project $Project)
     {
-        return $user->hasRole(["Admin"]);
+        if ($user->hasPermissionTo("View Projects") || $user->hasRole(["Admin"])) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -29,38 +35,53 @@ class ProjectPolicy
      */
     public function create(User $user)
     {
-        return $user->hasRole(["Admin"]);
+        if ($user->hasPermissionTo("Create Projects") || $user->hasRole(["Admin"])) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Project $project)
+    public function update(User $user, Project $Project)
     {
-        return $user->hasRole(["Admin"]);
+        if ($user->hasPermissionTo("Update Projects") || $user->hasRole(["Admin"])) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Project $project)
+    public function delete(User $user, Project $Project)
     {
-        return $user->hasRole(["Admin"]);
+        if ($user->hasPermissionTo("Delete Projects") || $user->hasRole(["Admin"])) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Project $project)
+    public function restore(User $user, Project $Project)
     {
-        return $user->hasRole(["Admin"]);
+        if ($user->hasRole(["Admin"])) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Project $project)
+    public function forceDelete(User $user, Project $Project)
     {
-        return $user->hasRole(["Admin"]);
+        if ($user->hasRole(["Admin"])) {
+            return true;
+        }
+        return false;
     }
 }
