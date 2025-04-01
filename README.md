@@ -47,4 +47,4 @@ Password: password
 These credentials are typically set during the initial seeding process, or you may modify the .env file or seeders to adjust them.
 
 9. Interact with the Laravel App
-You can now interact with the Laravel app through the Filament Admin Panel and the app's public-facing interface.
+You can now interact with the Laravel app.
